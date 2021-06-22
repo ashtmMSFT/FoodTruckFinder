@@ -79,11 +79,6 @@ def sort_by_distance(data):
     """ Sort our data in place by DistanceFromUser, ascending. """
     data.sort_values(by=['DistanceFromUser'], inplace = True)
 
-def drop_uninteresting_columns(data):
-    columns_to_keep = ['Applicant', 'FacilityType', 'Address', 'FoodItems', 'Latitude', 'Longitude', 'DistanceFromUser']
-    columns_to_drop = data.columns.difference(columns_to_keep)
-    data.drop(columns = columns_to_drop, inplace = True)
-
 def display_results(data):
     """ Show the user a list of the closest food trucks. """
     results = data.head(10)
