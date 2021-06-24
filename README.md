@@ -60,7 +60,16 @@ pip freeze > requirements.txt
 
 ## Testing
 
-TODO
+Our VS Code environment has already been configured to use Python's built-in `unittest` framework. There are [multiple ways](https://code.visualstudio.com/docs/python/testing#_run-tests) to run or debug tests in VS Code. Test discovery should happen automatically.
+
+You can also run tests from the CLI:
+
+```
+py .\test_ftf.py
+
+# Including -b flag will suppress stdout
+py .\test_ftf.py -b
+```
 
 # Context
 
@@ -78,6 +87,7 @@ Why Python, though? I recently took Andrew Ng's (somewhat dated) Machine Learnin
 - Add an auto-formatter and linter
 - Investigate how to package this script as a proper module and distribute it on Python Package Index (PyPI), or perhaps as an all-in-one single executable
 - Read through popular open-source Python projects to get a better idea of common conventions and best practices which could be applied here
+- Improve test code organization and add more tests
 - Investigate parsing user input as Decimals (using the decimal module) instead of floats; this may be totally overkill, but would be good to confirm we're not sacrificing accuracy by storing lat/long coordinates in floats
 
 
@@ -87,3 +97,4 @@ Why Python, though? I recently took Andrew Ng's (somewhat dated) Machine Learnin
 - For food trucks missing lat/long data, approximate these coordinates based on the given address
 - Currently, depending on the lat/long the user provides, it is possible to see multiple entries/permits for the same type of truck which have only minor variations in their locations. Support a new CLI argument to trim these similar options when presenting results
 - Only show trucks currently open/on-site when a user is searching. (This would likely be difficult; though the dataset contains a "dayshours" column and some trucks have schedule info here, the field is not consistently populated)
+- Add support for showing a map which plots the user's location and the recommended nearby trucks

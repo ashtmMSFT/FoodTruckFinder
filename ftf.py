@@ -10,15 +10,15 @@ FOOD_TRUCK_DATA_CSV = "Mobile_Food_Facility_Permit.csv"
 FOOD_TRUCK_DATA_URL = "https://data.sfgov.org/api/views/rqzj-sfat/rows.csv?accessType=DOWNLOAD"
 
 ## Function definitions
-def parse_user_input():
+def parse_user_input(user_input):
     """ Parse and validate the script arguments to learn the user's current location. """
-    if len(sys.argv) != 3:
+    if len(user_input) != 2:
         logging.error("Incorrect number of arguments provided")
         display_expected_usage_and_quit()
 
     try:
-        user_lat = float(sys.argv[1])
-        user_long = float(sys.argv[2])
+        user_lat = float(user_input[0])
+        user_long = float(user_input[1])
     except ValueError:
         logging.error("Incorrect type of arguments provided")
         display_expected_usage_and_quit()
@@ -77,24 +77,22 @@ def calculate_distance_to_truck(row, user_location):
 
 def sort_by_distance(data):
     """ Sort our data in place by DistanceFromUser, ascending. """
-    data.sort_values(by=['DistanceFromUser'], inplace = True)
+    data.sort_values(by = ['DistanceFromUser'], inplace = True)
 
-def display_results(data):
+def display_results(results):
     """ Show the user a list of the closest food trucks. """
-    results = data.head(10)
-
     print()
     print("=" * 60)
     print("= We found some food trucks near you. Let's eat!")
-    print("=" * 60, end="\n\n")
+    print("=" * 60, end = "\n\n")
 
     for row in results.itertuples():
         print(f"{row.Applicant}")
         print(f"{row.DistanceFromUser:.2f} miles away -- {row.Address} ({row.Latitude:.4f}, {row.Longitude:.4f})")
-        print(f"{row.FoodItems}", end="\n\n")
+        print(f"{row.FoodItems}", end = "\n\n")
 
-def main():
-    user_location = parse_user_input()
+def main(user_input = sys.argv[1:]):
+    user_location = parse_user_input(user_input)
 
     # Fetch the food truck data and save it to disk (if not already present)
     if not os.path.isfile(FOOD_TRUCK_DATA_CSV):
@@ -105,7 +103,11 @@ def main():
 
     calculate_distances(data, user_location)
     sort_by_distance(data)
-    display_results(data)
+
+    results = data.head(10)
+    display_results(results)
+    return results
 
 ## Run the script
-main()
+if __name__ == "__main__":
+    main()
